@@ -25,23 +25,20 @@ variable "valid_duration" {
   default     = 720
 }
 
-variable "match_type" {
-  description = "The match type to use when applying the policy. Supported values are Exact (default), Prefix or DefaultBranch."
-  type        = string
-  default     = "Exact"
+variable "scopes" {
+  description = <<EOF
+  <br><b>match_type:</b> The match type to use when applying the policy. Supported values are Exact, Prefix or DefaultBranch. Defaults to Exact.
+  <br><b>repository_id:</b> The repository ID. Needed only if the scope of the policy will be limited to a single repository. If match_type is DefaultBranch, this should not be defined.
+  <br><b>repository_ref:</b> The ref pattern to use for the match when match_type other than DefaultBranch. If match_type is Exact, this should be a qualified ref such as refs/heads/master. If match_type is Prefix, this should be a ref path such as refs/heads/releases.
+EOF
+  type        = list(object({
+    match_type     = optional(string, "Exact")
+    repository_id  = string
+    repository_ref = string
+  }))
 
   validation {
-    condition     = contains(["Exact", "Prefix", "DefaultBranch"], var.match_type)
+    condition     = alltrue([for v in var.scopes : contains(["Exact", "Prefix", "DefaultBranch"], v["match_type"])])
     error_message = "The match_type value must be one of Exact, Prefix or DefaultBranch."
   }
-}
-
-variable "repository_id" {
-  description = "The repository ID. Needed only if the scope of the policy will be limited to a single repository. If match_type is DefaultBranch, this should not be defined."
-  type        = string
-}
-
-variable "repository_ref" {
-  description = "The ref pattern to use for the match when match_type other than DefaultBranch. If match_type is Exact, this should be a qualified ref such as refs/heads/master. If match_type is Prefix, this should be a ref path such as refs/heads/releases."
-  type        = string
 }
