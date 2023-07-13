@@ -10,14 +10,23 @@ module "branch_policy_build_validation" {
 
   enabled = True # Defaults to True
 
-  project_id     = "ID of a project"
-  repository_id  = "ID of a repository"
-  repository_ref = "Name of the repository branch"
+  project_id = "ID of a project"
 
   name                = "Name of a branch policy"
   build_definition_id = "ID of a build definition"
+  valid_duration      = 720 # Defaults to 720
 
-  valid_duration = 720     # Defaults to 720
-  match_type     = "Exact" # Defaults to Exact
+  scopes = [
+    {
+      match_type     = "Exact" # Defaults to Exact
+      repository_id  = "ID of a repository"
+      repository_ref = "refs/heads/main"
+    },
+    {
+      match_type     = "Exact" # Defaults to Exact
+      repository_id  = "ID of the repository"
+      repository_ref = "refs/heads/dev"
+    },
+  ]
 }
 ```
