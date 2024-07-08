@@ -25,6 +25,12 @@ variable "valid_duration" {
   default     = 720
 }
 
+variable "manual_queue_only" {
+  description = "If set to true, the build will need to be manually queued. Defaults to false."
+  type        = bool
+  default     = false
+}
+
 variable "scopes" {
   description = <<EOF
   <br><b>match_type:</b> The match type to use when applying the policy. Supported values are Exact, Prefix or DefaultBranch. Defaults to Exact.
