@@ -14,7 +14,8 @@ module "branch_policy_build_validation" {
 
   name                = "Name of a branch policy"
   build_definition_id = "ID of a build definition"
-  valid_duration      = 720 # Defaults to 720
+  valid_duration      = 720   # Defaults to 720
+  manual_queue_only   = false # Defaults to false
 
   scopes = [
     {
