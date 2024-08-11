@@ -31,6 +31,12 @@ variable "manual_queue_only" {
   default     = false
 }
 
+variable "filename_patterns" {
+  description = "If a path filter is set, the policy will only apply when files which match the filter are changes. Not setting this field means that the policy will always apply. You can specify absolute paths and wildcards. Example: ['/WebApp/Models/Data.cs', '/WebApp/*', '*.cs']. Paths prefixed with '!' are excluded. Example: ['/WebApp/*', '!/WebApp/Tests/*']. Order is significant. Defaults to []."
+  type        = list(string)
+  default     = []
+}
+
 variable "scopes" {
   description = <<EOF
   <br><b>match_type:</b> The match type to use when applying the policy. Supported values are Exact, Prefix or DefaultBranch. Defaults to Exact.
@@ -47,10 +53,4 @@ EOF
     condition     = alltrue([for v in var.scopes : contains(["Exact", "Prefix", "DefaultBranch"], v["match_type"])])
     error_message = "The match_type value must be one of Exact, Prefix or DefaultBranch."
   }
-}
-
-variable "filename_patterns" {
-  description = "If a path filter is set, the policy will only apply when files which match the filter are changes. Not setting this field means that the policy will always apply. You can specify absolute paths and wildcards. Example: ['/WebApp/Models/Data.cs', '/WebApp/*', '*.cs']. Paths prefixed with '!' are excluded. Example: ['/WebApp/*', '!/WebApp/Tests/*']. Order is significant. Defaults to []."
-  type        = list(string)
-  default     = []
 }
