@@ -37,7 +37,7 @@ variable "scopes" {
   <br><b>repository_id:</b> The repository ID. Needed only if the scope of the policy will be limited to a single repository. If match_type is DefaultBranch, this should not be defined.
   <br><b>repository_ref:</b> The ref pattern to use for the match when match_type other than DefaultBranch. If match_type is Exact, this should be a qualified ref such as refs/heads/master. If match_type is Prefix, this should be a ref path such as refs/heads/releases.
 EOF
-  type        = list(object({
+  type = list(object({
     match_type     = optional(string, "Exact")
     repository_id  = string
     repository_ref = string
@@ -47,4 +47,10 @@ EOF
     condition     = alltrue([for v in var.scopes : contains(["Exact", "Prefix", "DefaultBranch"], v["match_type"])])
     error_message = "The match_type value must be one of Exact, Prefix or DefaultBranch."
   }
+}
+
+variable "filename_patterns" {
+  description = "If a path filter is set, the policy will only apply when files which match the filter are changes. Not setting this field means that the policy will always apply. You can specify absolute paths and wildcards. Example: ['/WebApp/Models/Data.cs', '/WebApp/*', '*.cs']. Paths prefixed with '!' are excluded. Example: ['/WebApp/*', '!/WebApp/Tests/*']. Order is significant. Defaults to []."
+  type        = list(string)
+  default     = []
 }

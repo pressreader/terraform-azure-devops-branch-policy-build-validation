@@ -7,9 +7,10 @@ resource "azuredevops_branch_policy_build_validation" "main" {
     build_definition_id = var.build_definition_id
     valid_duration      = var.valid_duration
     manual_queue_only   = var.manual_queue_only
+    filename_patterns   = var.filename_patterns
 
     dynamic "scope" {
-      for_each = {for v in var.scopes : "${v["repository_id"]} | ${v["repository_ref"]}" => v}
+      for_each = { for v in var.scopes : "${v["repository_id"]} | ${v["repository_ref"]}" => v }
 
       content {
         match_type     = scope.value["match_type"]
